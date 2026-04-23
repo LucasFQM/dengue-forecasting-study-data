@@ -64,7 +64,7 @@ Missing values are handled using:
 
 ---
 
-## 📊 Stationarity Tests
+### Stationarity Tests
 
 - Augmented Dickey-Fuller (ADF)  
 - Kwiatkowski-Phillips-Schmidt-Shin (KPSS)  
@@ -73,7 +73,7 @@ These tests provide complementary evidence regarding the stationarity properties
 
 ---
 
-## 📉 Time Series Analysis
+### Time Series Analysis
 
 - STL decomposition (trend, seasonality, and residual components)  
 - Autocorrelation Function (ACF)  
