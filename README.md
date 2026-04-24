@@ -136,18 +136,20 @@ The script prints:
 ## 📊 Example Output
 
 === SMA MODEL RESULTS ===
-       city  sMAPE   MAE   MSE  Theil  Coverage  Width
-0  Resende  25.43  12.5  245.3  0.82      0.95   45.2
-1  SJCampos  ...    ...   ...    ...       ...    ...
-2  OuroPreto ...    ...   ...    ...       ...    ...
+
+| City            | sMAPE | MAE  | MSE   | Theil | Coverage | Width |
+|-----------------|-------|------|-------|-------|----------|-------|
+| Resende         | 25.43 | 12.5 | 245.3 | 0.82  | 0.95     | 45.2  |
+| São José dos Campos | ... | ... | ...   | ...   | ...      | ...   |
+| Ouro Preto      | ...   | ...  | ...   | ...   | ...      | ...   |
 
 === EMA MODEL RESULTS ===
-       city  sMAPE   MAE   MSE  Theil  Coverage  Width
-0  Resende  23.78  11.2  198.7  0.79      0.94   42.8
-1  SJCampos  ...    ...   ...    ...       ...    ...
-2  OuroPreto ...    ...   ...    ...       ...    ...
 
----
+| City            | sMAPE | MAE  | MSE   | Theil | Coverage | Width |
+|-----------------|-------|------|-------|-------|----------|-------|
+| Resende         | 23.78 | 11.2 | 198.7 | 0.79  | 0.94     | 42.8  |
+| São José dos Campos | ... | ... | ...   | ...   | ...      | ...   |
+| Ouro Preto      | ...   | ...  | ...   | ...   | ...      | ...   |
 
 ## 🔬 Notes
 
