@@ -6,10 +6,10 @@ from processing import DataProcessor
 
 # ==================== CONFIG ====================
 
-DATA_DIR = Path("/home/lucasmoreira/Downloads/Dengue/data")
+DATA_DIR = Path("/home/lucasmoreira/Downloads/dengue-forecasting-study-data/data")
 
-CITIES = ["Sao_Jose_dos_Campos", "Resende", "Ouro_Preto"]
-DATASETS = ["R1", "R21", "R22", "R23"]
+CITIES = ["São José dos Campos", "Resende", "Ouro Preto"]
+DATASETS = ["r1", "r21", "r22", "r23"]
 
 START_YEAR = 2022
 BASE_YEAR = 2014
@@ -24,7 +24,7 @@ ETA = 0.5
 def load_data():
     return {
         city: {
-            ds: pd.read_csv(DATA_DIR / city / f"{ds}_{city}.csv")
+            ds: pd.read_csv(DATA_DIR / city / f"{ds}.csv")
             for ds in DATASETS
         }
         for city in CITIES
@@ -36,12 +36,12 @@ def process_data(data):
     processed = {}
 
     for city in CITIES:
-        processor = DataProcessor(data[city]["R1"])
+        processor = DataProcessor(data[city]["r1"])
 
         processed[city] = {}
-        processed[city]["R1"] = processor.linear_interpolation()
+        processed[city]["r1"] = processor.linear_interpolation()
 
-        for ds in ["R21", "R22", "R23"]:
+        for ds in ["r21", "r22", "r23"]:
             processed[city][ds] = processor.zero_imputation()
 
     return processed
@@ -53,9 +53,9 @@ def extract_period(data):
 
     return {
         city: {
-            'cases': data[city]["R1"][data[city]["R1"]['epi_weeks'] >= start_week]['cases'].values,
-            'temperature': data[city]["R1"][data[city]["R1"]['epi_weeks'] >= start_week]['avg_temp'].values,
-            'humidity': data[city]["R1"][data[city]["R1"]['epi_weeks'] >= start_week]['avg_humid'].values,
+            'cases': data[city]["r1"][data[city]["r1"]['epi_weeks'] >= start_week]['cases'].values,
+            'temperature': data[city]["r1"][data[city]["r1"]['epi_weeks'] >= start_week]['avg_temp'].values,
+            'humidity': data[city]["r1"][data[city]["r1"]['epi_weeks'] >= start_week]['avg_humid'].values,
         }
         for city in CITIES
     }
@@ -108,7 +108,8 @@ def run_models(cases):
     models = ForecastModels()
     metrics = Metrics()
 
-    results = []
+    sma_results = []
+    ema_results = []
 
     for city in CITIES:
         sma = models.SMA_model(cases[city], WINDOW, N_SIM)
@@ -116,24 +117,38 @@ def run_models(cases):
 
         actual = sma["Actual"].values
         sma_pred = sma["Forecast"].values
-        ema_pred = ema["Forecast"].values
+        sma_lower = sma["Lower_95"].values
+        sma_upper = sma["Upper_95"].values
 
-        results.append({
+        ema_pred = ema["Forecast"].values
+        ema_lower = ema["Lower_95"].values
+        ema_upper = ema["Upper_95"].values
+
+        sma_coverage = ((actual >= sma_lower) & (actual <= sma_upper)).mean()
+        ema_coverage = ((actual >= ema_lower) & (actual <= ema_upper)).mean()
+
+        sma_results.append({
             "city": city,
-            "SMA_sMAPE": metrics.sMAPE(actual, sma_pred),
-            "SMA_MAE": metrics.MAE(actual, sma_pred),
-            "SMA_MSE": metrics.MSE(actual, sma_pred),
-            "SMA_Theil": metrics.Utheil(actual, sma_pred),
-            "EMA_sMAPE": metrics.sMAPE(actual, ema_pred),
-            "EMA_MAE": metrics.MAE(actual, ema_pred),
-            "EMA_MSE": metrics.MSE(actual, ema_pred),
-            "EMA_Theil": metrics.Utheil(actual, ema_pred),
+            "sMAPE": metrics.sMAPE(actual, sma_pred),
+            "MAE": metrics.MAE(actual, sma_pred),
+            "MSE": metrics.MSE(actual, sma_pred),
+            "Theil": metrics.Utheil(actual, sma_pred),
+            "Coverage": sma_coverage,
         })
 
-    return pd.DataFrame(results)
+        ema_results.append({
+            "city": city,
+            "sMAPE": metrics.sMAPE(actual, ema_pred),
+            "MAE": metrics.MAE(actual, ema_pred),
+            "MSE": metrics.MSE(actual, ema_pred),
+            "Theil": metrics.Utheil(actual, ema_pred),
+            "Coverage": ema_coverage,
+        })
+
+    return pd.DataFrame(sma_results), pd.DataFrame(ema_results)
+
 
 # ==================== MAIN ====================
-
 def main():
 
     data = load_data()
@@ -141,8 +156,9 @@ def main():
     data_period = extract_period(data)
 
     cases = {city: data_period[city]['cases'] for city in CITIES}
-    temperatures = {city: data_period[city]['temperature'] for city in CITIES}
-    humidities = {city: data_period[city]['humidity'] for city in CITIES}
+    
+    #temperatures = {city: data_period[city]['temperature'] for city in CITIES}
+    #humidities = {city: data_period[city]['humidity'] for city in CITIES}
 
     # ==================== STATIONARITY TESTS ====================
     # adf, kpss = run_stationarity_tests(cases)
@@ -154,11 +170,13 @@ def main():
     # ==================== TIME SERIES ANALYSIS ====================
     #ts_results = run_time_series_analysis(cases, temperatures, humidities)
 
-    # ==================== MODELING ====================
-    df_results = run_models(cases)
+    df_sma, df_ema = run_models(cases)
 
-    print("\n=== MODEL RESULTS ===")
-    print(df_results.round(2))
+    print("\n=== SMA MODEL RESULTS ===")
+    print(df_sma.round(2))
+
+    print("\n=== EMA MODEL RESULTS ===")
+    print(df_ema.round(2))
 
 
 if __name__ == "__main__":
