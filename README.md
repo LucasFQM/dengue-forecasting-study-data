@@ -137,19 +137,19 @@ The script prints:
 
 === SMA MODEL RESULTS ===
 
-| City            | sMAPE | MAE  | MSE   | Theil | Coverage | Width |
-|-----------------|-------|------|-------|-------|----------|-------|
-| Resende         | 25.43 | 12.5 | 245.3 | 0.82  | 0.95     | 45.2  |
-| São José dos Campos | ... | ... | ...   | ...   | ...      | ...   |
-| Ouro Preto      | ...   | ...  | ...   | ...   | ...      | ...   |
+| City                 | sMAPE | MAE | MSE   | Theil | Coverage |
+|----------------------|-------|-----|-------|-------|----------|
+| Resende              | 25.43 | 12.5| 245.3 | 0.82  | 0.95     |
+| São José dos Campos  | ...   | ... | ...   | ...   | ...      |
+| Ouro Preto           | ...   | ... | ...   | ...   | ...      |
 
 === EMA MODEL RESULTS ===
 
-| City            | sMAPE | MAE  | MSE   | Theil | Coverage | Width |
-|-----------------|-------|------|-------|-------|----------|-------|
-| Resende         | 23.78 | 11.2 | 198.7 | 0.79  | 0.94     | 42.8  |
-| São José dos Campos | ... | ... | ...   | ...   | ...      | ...   |
-| Ouro Preto      | ...   | ...  | ...   | ...   | ...      | ...   |
+| City                 | sMAPE | MAE | MSE   | Theil | Coverage |
+|----------------------|-------|-----|-------|-------|----------|
+| Resende              | 23.78 | 11.2| 198.7 | 0.79  | 0.94     |
+| São José dos Campos  | ...   | ... | ...   | ...   | ...      |
+| Ouro Preto           | ...   | ... | ...   | ...   | ...      |
 
 ## 🔬 Notes
 
