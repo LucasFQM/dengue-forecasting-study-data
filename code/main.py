@@ -9,7 +9,7 @@ from processing import DataProcessor
 DATA_DIR = Path("/home/lucasmoreira/Downloads/dengue-forecasting-study-data/data")
 
 CITIES = ["São José dos Campos", "Resende", "Ouro Preto"]
-DATASETS = ["r1", "r21", "r22", "r23"]
+DATASETS = ["InfoDengue", "SinanConfirmation", "SinanHospitalization", "SinanOutcome"]
 
 START_YEAR = 2022
 BASE_YEAR = 2014
@@ -36,12 +36,12 @@ def process_data(data):
     processed = {}
 
     for city in CITIES:
-        processor = DataProcessor(data[city]["r1"])
+        processor = DataProcessor(data[city]["InfoDengue"])
 
         processed[city] = {}
-        processed[city]["r1"] = processor.linear_interpolation()
+        processed[city]["InfoDengue"] = processor.linear_interpolation()
 
-        for ds in ["r21", "r22", "r23"]:
+        for ds in ["SinanConfirmation", "SinanHospitalization", "SinanOutcome"]:
             processed[city][ds] = processor.zero_imputation()
 
     return processed
@@ -53,9 +53,9 @@ def extract_period(data):
 
     return {
         city: {
-            'cases': data[city]["r1"][data[city]["r1"]['epi_weeks'] >= start_week]['cases'].values,
-            'temperature': data[city]["r1"][data[city]["r1"]['epi_weeks'] >= start_week]['avg_temp'].values,
-            'humidity': data[city]["r1"][data[city]["r1"]['epi_weeks'] >= start_week]['avg_humid'].values,
+            'cases': data[city]["InfoDengue"][data[city]["InfoDengue"]['epi_weeks'] >= start_week]['cases'].values,
+            'temperature': data[city]["InfoDengue"][data[city]["InfoDengue"]['epi_weeks'] >= start_week]['avg_temp'].values,
+            'humidity': data[city]["InfoDengue"][data[city]["InfoDengue"]['epi_weeks'] >= start_week]['avg_humid'].values,
         }
         for city in CITIES
     }
