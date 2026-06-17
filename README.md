@@ -93,7 +93,7 @@ These tests provide complementary evidence regarding the stationarity properties
 - Monte Carlo simulation is used to generate prediction intervals  
 
 ### 🎲 Monte Carlo Simulation
-- Assumes a Gaussian distribution  
+- Assumes a Student's \(t\)-distribution  
 - Generates multiple simulated scenarios  
 - Produces:
   - Point forecasts  
