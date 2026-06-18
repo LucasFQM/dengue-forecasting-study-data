@@ -106,7 +106,8 @@ These tests provide complementary evidence regarding the stationarity properties
 - sMAPE (Symmetric Mean Absolute Percentage Error)  
 - MAE (Mean Absolute Error)  
 - MSE (Mean Squared Error)  
-- Theil's U statistic (comparison with a naive benchmark)  
+- Theil's U statistic (comparison with a naive benchmark)
+- Empirical Coverage  
 
 ---
 
