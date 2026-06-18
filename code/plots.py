@@ -8,6 +8,26 @@ class ForecastPlots:
     """
 
     def forecast_plot(self, results_df, city, model):
+        """
+        Plot observed values, forecasts, and prediction intervals.
+
+        Parameters
+        ----------
+        results_df : pandas.DataFrame
+            DataFrame containing the columns:
+            'Actual', 'Forecast', 'Lower_95', and 'Upper_95'.
+
+        city : str
+            Name of the city/location.
+
+        model : str
+            Forecasting model name.
+
+        Returns
+        -------
+        None
+            Displays the forecast plot.
+        """
 
         x = np.arange(len(results_df))
 
@@ -24,7 +44,7 @@ class ForecastPlots:
             results_df["Forecast"],
             linestyle="-",
             label="Forecast",
-            color='red'
+            color="red"
         )
 
         plt.fill_between(
