@@ -7,7 +7,7 @@ class ForecastModels:
     Forecasting models using Monte Carlo simulation with moving averages.
     """
 
-    def SMA_model(self, series, window, n_montecarlo, seed=42):
+    def SMA_model(self, series, window, df, n_montecarlo, seed=42):
         """
         Simple Moving Average (SMA) model with Monte Carlo simulation.
 
@@ -18,6 +18,9 @@ class ForecastModels:
         
         window : int
             Size of the moving window for training.
+
+        df : int
+            Degrees of freedom
         
         n_montecarlo : int
             Number of Monte Carlo simulations.
@@ -44,7 +47,7 @@ class ForecastModels:
             mu = np.mean(train_window)
             sigma = np.std(train_window)
 
-            mc_forecasts = np.random.normal(mu, sigma, n_montecarlo)
+            mc_forecasts = mu + sigma * np.random.standard_t(df, size=n_montecarlo)
             mc_forecasts = np.maximum(mc_forecasts, 0)
 
             forecast = int(np.round(np.mean(mc_forecasts)))
@@ -89,7 +92,7 @@ class ForecastModels:
 
         return prev
 
-    def EMA_model(self, series, window, n_montecarlo, eta, seed=42):
+    def EMA_model(self, series, window, df, n_montecarlo, eta, seed=42):
         """
         Exponential Moving Average (EMA) model with Monte Carlo simulation.
 
@@ -100,6 +103,9 @@ class ForecastModels:
         
         window : int
             Size of the moving window for training.
+
+        df : int
+            Degrees of freedom
         
         n_montecarlo : int
             Number of Monte Carlo simulations.
@@ -129,7 +135,7 @@ class ForecastModels:
             mu = self.compute_EMA(train_window, eta)
             sigma = np.std(train_window)
 
-            mc_forecasts = np.random.normal(mu, sigma, n_montecarlo)
+            mc_forecasts = mu + sigma*np.random.standard_t(df, size=n_montecarlo)
             mc_forecasts = np.maximum(mc_forecasts, 0)
 
             forecast = int(np.round(np.mean(mc_forecasts)))
