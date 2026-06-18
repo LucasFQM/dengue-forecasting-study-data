@@ -4,8 +4,8 @@ This repository contains the code and datasets used to reproduce the study title
 
 This work was developed at the Aeronautics Institute of Technology (ITA) by:
 
-- **Author:** Lucas Ferreira Quintão Moreira  
-- **Advisor:** Takashi Yoneyama  
+* **Author:** Lucas Ferreira Quintão Moreira
+* **Advisor:** Takashi Yoneyama
 
 ---
 
@@ -13,43 +13,48 @@ This work was developed at the Aeronautics Institute of Technology (ITA) by:
 
 This project investigates the dynamics of dengue in three Brazilian cities:
 
-- São José dos Campos  
-- Resende  
-- Ouro Preto  
+* São José dos Campos
+* Resende
+* Ouro Preto
 
 The analysis integrates statistical and computational approaches, including:
 
-- Data preprocessing  
-- Stationarity testing (ADF and KPSS)  
-- Time series decomposition (STL)  
-- Correlation analysis (ACF, PACF, CCF)  
-- Forecasting models based on moving averages combined with Monte Carlo simulation  
+* Data preprocessing
+* Stationarity testing (ADF and KPSS)
+* Time series decomposition (STL)
+* Correlation analysis (ACF, PACF, CCF)
+* Forecasting models based on moving averages combined with Monte Carlo simulation
+* Forecast visualization with prediction intervals
 
 ---
 
 ## 📁 Repository Structure
 
-```
+```text
 .
 ├── code/
 │   ├── main.py
 │   ├── models.py
 │   ├── analysis.py
-│   └── processing.py
+│   ├── processing.py
+│   └── plots.py
 ├── data/
 └── README.md
 ```
 
 ### 📂 `code/`
+
 Contains all source code:
 
-- `main.py` → Main execution script  
-- `models.py` → Forecasting models and evaluation metrics  
-- `analysis.py` → Statistical tests and time series analysis  
-- `processing.py` → Data preprocessing  
+* `main.py` → Main execution script
+* `models.py` → Forecasting models and evaluation metrics
+* `analysis.py` → Statistical tests and time series analysis
+* `processing.py` → Data preprocessing
+* `plots.py` → Forecast visualization utilities
 
 ### 📂 `data/`
-Contains epidemiological and climate datasets used in the study.  
+
+Contains epidemiological and climate datasets used in the study.
 
 ---
 
@@ -59,15 +64,15 @@ Contains epidemiological and climate datasets used in the study.
 
 Missing values are handled using:
 
-- Linear interpolation (temperature and air humidity)  
-- Zero imputation (other variables)  
+* Linear interpolation (temperature and air humidity)
+* Zero imputation (other variables)
 
 ---
 
 ### Stationarity Tests
 
-- Augmented Dickey-Fuller (ADF)  
-- Kwiatkowski-Phillips-Schmidt-Shin (KPSS)  
+* Augmented Dickey-Fuller (ADF)
+* Kwiatkowski-Phillips-Schmidt-Shin (KPSS)
 
 These tests provide complementary evidence regarding the stationarity properties of the time series.
 
@@ -75,39 +80,55 @@ These tests provide complementary evidence regarding the stationarity properties
 
 ### Time Series Analysis
 
-- STL decomposition (trend, seasonality, and residual components)  
-- Autocorrelation Function (ACF)  
-- Partial Autocorrelation Function (PACF)  
-- Cross-Correlation Function (CCF) between dengue cases and climate variables  
+* STL decomposition (trend, seasonality, and residual components)
+* Autocorrelation Function (ACF)
+* Partial Autocorrelation Function (PACF)
+* Cross-Correlation Function (CCF) between dengue cases and climate variables
 
 ---
 
 ## 🤖 Forecasting Models
 
 ### 📊 Simple Moving Average (SMA)
-- Uses the mean and standard deviation of a rolling window  
-- Monte Carlo simulation is used to generate prediction intervals  
+
+* Uses the mean and standard deviation of a rolling window
+* Monte Carlo simulation is used to generate prediction intervals
 
 ### 📊 Exponential Moving Average (EMA)
-- Applies exponential smoothing to estimate expected values  
-- Monte Carlo simulation is used to generate prediction intervals  
+
+* Applies exponential smoothing to estimate expected values
+* Monte Carlo simulation is used to generate prediction intervals
 
 ### 🎲 Monte Carlo Simulation
-- Assumes a Student's \(t\)-distribution  
-- Generates multiple simulated scenarios  
-- Produces:
-  - Point forecasts  
-  - 95% prediction intervals  
+
+* Assumes a Student's (t)-distribution
+* Generates multiple simulated scenarios
+* Produces:
+
+  * Point forecasts
+  * 95% prediction intervals
 
 ---
 
 ## 📈 Evaluation Metrics
 
-- sMAPE (Symmetric Mean Absolute Percentage Error)  
-- MAE (Mean Absolute Error)  
-- MSE (Mean Squared Error)  
-- Theil's U statistic (comparison with a naive benchmark)
-- Empirical Coverage  
+* sMAPE (Symmetric Mean Absolute Percentage Error)
+* MAE (Mean Absolute Error)
+* MSE (Mean Squared Error)
+* Theil's U statistic (comparison with a naive benchmark)
+* Empirical Coverage
+
+---
+
+## 📉 Forecast Visualization
+
+Forecast results are visualized through:
+
+* Observed cases
+* Forecasted values
+* 95% prediction intervals
+
+The generated plots allow a visual assessment of model performance and forecast uncertainty.
 
 ---
 
@@ -127,47 +148,61 @@ python main.py
 
 ### 3. Output
 
-The script prints:
+The script produces:
 
-- Forecast performance metrics for each city  
-- A comparison between SMA and EMA models  
+* Forecast performance metrics for each city
+* A comparison between SMA and EMA models
+* Forecast plots with 95% prediction intervals
 
 ---
 
 ## 📊 Example Output
 
-=== SMA MODEL RESULTS ===
+### Metrics
 
-| City                 | sMAPE | MAE | MSE   | Theil | Coverage |
-|----------------------|-------|-----|-------|-------|----------|
-| Resende              | 25.43 | 12.5| 245.3 | 0.82  | 0.95     |
-| São José dos Campos  | ...   | ... | ...   | ...   | ...      |
-| Ouro Preto           | ...   | ... | ...   | ...   | ...      |
+#### SMA MODEL RESULTS
 
-=== EMA MODEL RESULTS ===
+| City                | sMAPE | MAE  | MSE   | Theil | Coverage |
+| ------------------- | ----- | ---- | ----- | ----- | -------- |
+| Resende             | 25.43 | 12.5 | 245.3 | 0.82  | 0.95     |
+| São José dos Campos | ...   | ...  | ...   | ...   | ...      |
+| Ouro Preto          | ...   | ...  | ...   | ...   | ...      |
 
-| City                 | sMAPE | MAE | MSE   | Theil | Coverage |
-|----------------------|-------|-----|-------|-------|----------|
-| Resende              | 23.78 | 11.2| 198.7 | 0.79  | 0.94     |
-| São José dos Campos  | ...   | ... | ...   | ...   | ...      |
-| Ouro Preto           | ...   | ... | ...   | ...   | ...      |
+#### EMA MODEL RESULTS
+
+| City                | sMAPE | MAE  | MSE   | Theil | Coverage |
+| ------------------- | ----- | ---- | ----- | ----- | -------- |
+| Resende             | 23.78 | 11.2 | 198.7 | 0.79  | 0.94     |
+| São José dos Campos | ...   | ...  | ...   | ...   | ...      |
+| Ouro Preto          | ...   | ...  | ...   | ...   | ...      |
+
+### Forecast Plot
+
+The script also generates forecast figures showing:
+
+* Actual observations
+* Forecasted values
+* 95% prediction intervals
+
+---
 
 ## 🔬 Notes
 
-- Forecasts are constrained to non-negative values  
-- Results are rounded to integers to reflect count data  
-- The standard deviation of the rolling window is used as a proxy for forecast uncertainty  
+* Forecasts are constrained to non-negative values
+* Results are rounded to integers to reflect count data
+* The standard deviation of the rolling window is used as a proxy for forecast uncertainty
 
 ---
 
 ## 📎 Reproducibility
 
-- A fixed random seed ensures reproducibility  
-- All results can be replicated by executing `main.py`  
+* A fixed random seed ensures reproducibility
+* All results can be replicated by executing `main.py`
 
 ---
 
 ## 📄 License
 
 This project is intended for academic and research purposes.
+
 
