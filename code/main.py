@@ -1,12 +1,14 @@
 import pandas as pd
 from pathlib import Path
+
 from analysis import StationarityTests, TimeSeriesAnalysis
 from models import ForecastModels, Metrics
 from processing import DataProcessor
+from plots import ForecastPlots
 
 # ==================== CONFIG ====================
 
-DATA_DIR = Path("/home/lucasmoreira/Downloads/dengue-forecasting-study-data/data")
+DATA_DIR = Path("/home/lucasmoreira/Downloads/Dengue_Mestrado/dengue-forecasting-study-data/data")
 
 CITIES = ["São José dos Campos", "Resende", "Ouro Preto"]
 DATASETS = ["InfoDengue", "SinanConfirmation", "SinanHospitalization", "SinanOutcome"]
@@ -17,7 +19,7 @@ WEEKS_PER_YEAR = 52
 
 WINDOW = 3
 N_SIM = 300
-ETA = 0.5
+ETA = 0.7
 GL = 3
 
 # ==================== LOAD DATA ====================
@@ -54,9 +56,17 @@ def extract_period(data):
 
     return {
         city: {
-            'cases': data[city]["InfoDengue"][data[city]["InfoDengue"]['epi_weeks'] >= start_week]['cases'].values,
-            'temperature': data[city]["InfoDengue"][data[city]["InfoDengue"]['epi_weeks'] >= start_week]['avg_temp'].values,
-            'humidity': data[city]["InfoDengue"][data[city]["InfoDengue"]['epi_weeks'] >= start_week]['avg_humid'].values,
+            'cases': data[city]["InfoDengue"][
+                data[city]["InfoDengue"]['epi_weeks'] >= start_week
+            ]['cases'].values,
+
+            'temperature': data[city]["InfoDengue"][
+                data[city]["InfoDengue"]['epi_weeks'] >= start_week
+            ]['avg_temp'].values,
+
+            'humidity': data[city]["InfoDengue"][
+                data[city]["InfoDengue"]['epi_weeks'] >= start_week
+            ]['avg_humid'].values,
         }
         for city in CITIES
     }
@@ -112,11 +122,19 @@ def run_models(cases):
     sma_results = []
     ema_results = []
 
+    sma_forecasts = {}
+    ema_forecasts = {}
+
     for city in CITIES:
+
         sma = models.SMA_model(cases[city], WINDOW, GL, N_SIM)
         ema = models.EMA_model(cases[city], WINDOW, GL, N_SIM, ETA)
 
+        sma_forecasts[city] = sma
+        ema_forecasts[city] = ema
+
         actual = sma["Actual"].values
+
         sma_pred = sma["Forecast"].values
         sma_lower = sma["Lower_95"].values
         sma_upper = sma["Upper_95"].values
@@ -125,8 +143,15 @@ def run_models(cases):
         ema_lower = ema["Lower_95"].values
         ema_upper = ema["Upper_95"].values
 
-        sma_coverage = ((actual >= sma_lower) & (actual <= sma_upper)).mean()
-        ema_coverage = ((actual >= ema_lower) & (actual <= ema_upper)).mean()
+        sma_coverage = (
+            (actual >= sma_lower) &
+            (actual <= sma_upper)
+        ).mean()
+
+        ema_coverage = (
+            (actual >= ema_lower) &
+            (actual <= ema_upper)
+        ).mean()
 
         sma_results.append({
             "city": city,
@@ -146,32 +171,55 @@ def run_models(cases):
             "Coverage": ema_coverage,
         })
 
-    return pd.DataFrame(sma_results), pd.DataFrame(ema_results)
-
+    return (
+        pd.DataFrame(sma_results),
+        pd.DataFrame(ema_results),
+        sma_forecasts,
+        ema_forecasts
+    )
 
 # ==================== MAIN ====================
+
 def main():
 
     data = load_data()
     data = process_data(data)
     data_period = extract_period(data)
 
-    cases = {city: data_period[city]['cases'] for city in CITIES}
-    
-    #temperatures = {city: data_period[city]['temperature'] for city in CITIES}
-    #humidities = {city: data_period[city]['humidity'] for city in CITIES}
+    cases = {
+        city: data_period[city]['cases']
+        for city in CITIES
+    }
+
+    # temperatures = {
+    #     city: data_period[city]['temperature']
+    #     for city in CITIES
+    # }
+
+    # humidities = {
+    #     city: data_period[city]['humidity']
+    #     for city in CITIES
+    # }
 
     # ==================== STATIONARITY TESTS ====================
+
     # adf, kpss = run_stationarity_tests(cases)
+
     # print("\n=== ADF ===")
     # print(adf)
+
     # print("\n=== KPSS ===")
     # print(kpss)
 
     # ==================== TIME SERIES ANALYSIS ====================
-    #ts_results = run_time_series_analysis(cases, temperatures, humidities)
 
-    df_sma, df_ema = run_models(cases)
+    # ts_results = run_time_series_analysis(
+    #     cases,
+    #     temperatures,
+    #     humidities
+    # )
+
+    df_sma, df_ema, sma_forecasts, ema_forecasts = run_models(cases)
 
     print("\n=== SMA MODEL RESULTS ===")
     print(df_sma.round(2))
@@ -179,6 +227,24 @@ def main():
     print("\n=== EMA MODEL RESULTS ===")
     print(df_ema.round(2))
 
+    # ==================== PLOTS ====================
+
+    plotter = ForecastPlots()
+
+    for city in CITIES:
+
+        plotter.forecast_plot(
+            sma_forecasts[city],
+            city,
+            "SMA"
+        )
+
+        plotter.forecast_plot(
+            ema_forecasts[city],
+            city,
+            "EMA"
+        )
 
 if __name__ == "__main__":
     main()
+
