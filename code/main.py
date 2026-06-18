@@ -18,6 +18,7 @@ WEEKS_PER_YEAR = 52
 WINDOW = 3
 N_SIM = 300
 ETA = 0.5
+GL = 3
 
 # ==================== LOAD DATA ====================
 
@@ -112,8 +113,8 @@ def run_models(cases):
     ema_results = []
 
     for city in CITIES:
-        sma = models.SMA_model(cases[city], WINDOW, N_SIM)
-        ema = models.EMA_model(cases[city], WINDOW, N_SIM, ETA)
+        sma = models.SMA_model(cases[city], WINDOW, GL, N_SIM)
+        ema = models.EMA_model(cases[city], WINDOW, GL, N_SIM, ETA)
 
         actual = sma["Actual"].values
         sma_pred = sma["Forecast"].values
