@@ -1,11 +1,11 @@
-# Modeling and Analytical Study of Dengue Dynamics in Brazilian Cities
+# Dengue Forecasting and Time Series Analysis
 
-This repository contains the code and datasets used to reproduce the study titled *"Modeling and Analytical Study of Dengue Dynamics in Brazilian Cities"*.
+This repository provides Python code for preprocessing, analyzing, and forecasting dengue time series using statistical methods and Monte Carlo simulation.
 
-This work was developed at the Aeronautics Institute of Technology (ITA) by:
+## Authors
 
-* **Author:** Lucas Ferreira Quintão Moreira
-* **Advisor:** Takashi Yoneyama
+- **Lucas Ferreira Quintão Moreira**
+- **Takashi Yoneyama**
 
 ---
 
