@@ -13,24 +13,23 @@ This repository provides Python code for preprocessing, analyzing, and forecasti
 
 This project investigates dengue dynamics and short-term forecasting in three Brazilian municipalities:
 
-* São José dos Campos
-* Resende
-* Ouro Preto
+- São José dos Campos
+- Resende
+- Ouro Preto
 
 The analysis combines statistical time series methods and computational approaches, including:
 
-* Data preprocessing
-* Stationarity testing (ADF and KPSS)
-* Time series decomposition (STL)
-* Partial autocorrelation analysis (PACF)
-* Forecasting using Simple Moving Average (SMA) and Exponential Moving Average (EMA)
-* Monte Carlo simulation based on the Student's t-distribution for uncertainty quantification
+- Data preprocessing
+- Stationarity testing (ADF and KPSS)
+- Time series decomposition (STL)
+- Partial autocorrelation analysis (PACF)
+- Forecasting using Simple Moving Average (SMA) and Exponential Moving Average (EMA)
+- Monte Carlo simulation based on the Student's t-distribution for uncertainty quantification
 
 ---
 
 ## Repository Structure
-
-```text
+```
 .
 ├── Codes/
 │   ├── main.py
@@ -46,6 +45,7 @@ The analysis combines statistical time series methods and computational approach
 ├── .gitignore
 ├── README.md
 └── requirements.txt
+
 ```
 
 ### `Codes/`
@@ -86,7 +86,7 @@ Forecasting performance is assessed using:
 - Theil's U statistic.
 - Prediction Interval Coverage Probability (PICP).
 - Mean Prediction Interval Width (MPIW).
-- Diebold-Mariano test for pairwise comparison of SMA and EMA forecasts.
+- Diebold-Mariano test for pairwise comparisons among SMA, EMA, and Naive forecasts.
 
 ---
 
@@ -112,7 +112,7 @@ The main script:
 - Loads weekly dengue case data from InfoDengue.
 - Generates SMA and EMA forecasts for each municipality.
 - Calculates forecasting performance metrics.
-- Performs pairwise Diebold-Mariano tests between SMA and EMA for each municipality.
+- Performs pairwise Diebold-Mariano tests among SMA, EMA, and Naive forecasts for each municipality.
 
 The script displays the Diebold-Mariano test results in the console.
 
@@ -122,41 +122,41 @@ The script displays the Diebold-Mariano test results in the console.
 
 The main experimental parameters are defined in `main.py`. The current default configuration is:
 
-| Parameter | Value |
-|---|---|
-| Data source | InfoDengue |
-| Municipalities | São José dos Campos, Resende, Ouro Preto |
-| Study period | 2022–2025 |
-| Base year | 2014 |
-| Weeks per year | 52 |
-| Forecasting models | SMA and EMA |
-| Rolling window | 3 |
-| EMA smoothing parameter (α) | 0.5 |
-| Student's t degrees of freedom (ν) | 3 |
-| Monte Carlo simulations | 300 |
-| Random seed | 42 |
-| Lower prediction percentile | 2.5 |
-| Upper prediction percentile | 97.5 |
-| STL period | 52 |
-| STL robust estimation | True |
-| PACF maximum lags | 26 |
-| PACF method | Yule-Walker |
-| ADF regression | Constant |
-| KPSS regression | Constant |
-| Theil's U epsilon | 1e-6 |
-
+| **Parameter**                      | **Value**                                |
+| ---------------------------------- | ---------------------------------------- |
+| Data source                        | InfoDengue                               |
+| Municipalities                     | São José dos Campos, Resende, Ouro Preto |
+| Full data period                   | 2014–2025                                |
+| Forecast evaluation period         | 2022–2025                                |
+| Base year                          | 2014                                     |
+| Weeks per year                     | 52                                       |
+| Forecasting models                 | SMA and EMA                              |
+| Rolling window                     | 3                                        |
+| EMA smoothing parameter (α)        | 0.5                                      |
+| Student's t degrees of freedom (ν) | 3                                        |
+| Monte Carlo simulations            | 300                                      |
+| Random seed                        | 42                                       |
+| Lower prediction percentile        | 2.5                                      |
+| Upper prediction percentile        | 97.5                                     |
+| STL period                         | 52                                       |
+| STL robust estimation              | True                                     |
+| PACF maximum lags                  | 26                                       |
+| PACF method                        | Yule-Walker                              |
+| ADF regression                     | Constant                                 |
+| KPSS regression                    | Constant                                 |
+| Theil's U epsilon                  | 1e-6                                     |
 
 ### Configuration of Manuscript Results
 
 The following table specifies the forecasting and simulation parameters adjusted across the experiments reported in the manuscript. All other parameters remained at their default values defined in `main.py`.
 
-| Parameter | Table 3 | Table 4 | Table 5 | Table 6 | Figure 5 | Figure 6 | Figure 7 | Figure 8 | Figure 9 | Figure 10 | Figure 11 | Figure 12 |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| Forecasting models | SMA | SMA | EMA | EMA | SMA | EMA | SMA | SMA | SMA | EMA | EMA | EMA |
-| Rolling window | 3 and 5 | 3 | 3 | 3 | 3 | 3 | 3 and 5 | 3 and 5 | 3 and 5 | 3 | 3 | 3 |
-| EMA smoothing parameter (α) | None | None | 0.2, 0.5 and 0.7 | 0.5 | None | 0.5 | None | None | None | 0.2, 0.5 and 0.7 | 0.2, 0.5 and 0.7 | 0.2, 0.5 and 0.7 |
-| Student's t degrees of freedom (ν) | 3 | 1, 2 and 3 | 3 | 1, 2 and 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 | 3 |
-| Monte Carlo simulations | 300 | 300 | 300 | 300 | 300 | 300 | 0 to 1000 | 0 to 1000 | 0 to 1000 | 0 to 1000 | 0 to 1000 | 0 to 1000 |
+| **Parameter**                      | **Table 3** | **Table 4** | **Table 5**      | **Table 6** | **Figure 5** | **Figure 6** | **Figure 7** | **Figure 8** | **Figure 9** | **Figure 10**    | **Figure 11**    | **Figure 12**    |
+| ---------------------------------- | ----------- | ----------- | ---------------- | ----------- | ------------ | ------------ | ------------ | ------------ | ------------ | ---------------- | ---------------- | ---------------- |
+| Forecasting models                 | SMA         | SMA         | EMA              | EMA         | SMA          | EMA          | SMA          | SMA          | SMA          | EMA              | EMA              | EMA              |
+| Rolling window                     | 3 and 5     | 3           | 3                | 3           | 3            | 3            | 3 and 5      | 3 and 5      | 3 and 5      | 3                | 3                | 3                |
+| EMA smoothing parameter (α)        | None        | None        | 0.2, 0.5 and 0.7 | 0.5         | None         | 0.5          | None         | None         | None         | 0.2, 0.5 and 0.7 | 0.2, 0.5 and 0.7 | 0.2, 0.5 and 0.7 |
+| Student's t degrees of freedom (ν) | 3           | 1, 3 and 5  | 3                | 1, 3 and 5  | 3            | 3            | 3            | 3            | 3            | 3                | 3                | 3                |
+| Monte Carlo simulations            | 300         | 300         | 300              | 300         | 300          | 300          | 0 to 1000    | 0 to 1000    | 0 to 1000    | 0 to 1000        | 0 to 1000        | 0 to 1000        |
 
 ---
 
@@ -167,11 +167,10 @@ The following table specifies the forecasting and simulation parameters adjusted
 - The estimated local standard deviation acts as a scale parameter for the Student's t-distributed random variates.
 - Negative simulated values are set to zero.
 - The nominal 95% prediction intervals may exhibit different empirical coverage levels depending on the degrees of freedom.
-- The Diebold-Mariano test compares SMA, EMA, and Naive forecasts separately for each municipality.
+- The Diebold-Mariano test compares SMA, EMA, and Naive forecasts pairwise for each municipality.
 
 ---
 
 ## License
 
 This project is intended for academic and research purposes.
-
