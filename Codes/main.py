@@ -54,7 +54,7 @@ ANALYSIS_CONFIG = {
 # ==================== EXPERIMENT CONFIGURATION ====================
 
 EXPERIMENT_CONFIG = {
-    "model": "EMA",
+    "model": ["SMA", "EMA"],
     "window": 3,
     "degrees_of_freedom": 3,
     "n_simulations": 300,
